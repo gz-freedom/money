@@ -1,0 +1,17 @@
+<div class="form-row plan-form">
+  <div class="form-group col-3">
+    <label>当月剩余天数</label>
+    <input type="number" class="form-control month-days" [(ngModel)]="monthDays" readonly>
+  </div>
+  <div class="form-group col-3">
+    <label>计划每日开销</label>
+    <input type="number" class="form-control" [(ngModel)]="daySpend" (keyup)="keyup()">
+  </div>
+  <div class="form-group col-3">
+    <label>当月总开销</label>
+    <input type="number" class="form-control" [(ngModel)]="totalSpend" readonly>
+  </div>
+  <div class="form-group col-3">
+    <button class="btn btn-primary btn-plan-start">开始当月计划</button>
+  </div>
+</div>
