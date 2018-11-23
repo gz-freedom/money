@@ -10,6 +10,6 @@ export class ExService {
   constructor(private http: HttpClient) { }
 
   getCurrentExpenditure() {
-    return this.http.get(`${this.uri}`);
+    return this.http.get(`${this.uri}?year=2018&month=3`);
   }
 }
