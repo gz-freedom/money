@@ -5,11 +5,22 @@ import { HttpClient } from "@angular/common/http";
   providedIn: 'root'
 })
 export class ExService {
-  uri = 'http://localhost:4000/';
+  uri = 'http://localhost:4000';
 
   constructor(private http: HttpClient) { }
 
-  getCurrentExpenditure() {
-    return this.http.get(`${this.uri}?year=2018&month=3`);
+  getCurrentExpenditure(y, m) {
+    return this.http.get(`${this.uri}/?year=${y}&month=${m}`);
+  }
+
+  addExpenditure(obj) {
+    return this.http.post(`${this.uri}/addMonth`, obj);
+  }
+
+  updateExpenditure(dayExpenditure, id) {
+    let obj = {
+      dayExpenditure: dayExpenditure
+    };
+    return this.http.post(`${this.uri}/update/${id}`, obj);
   }
 }

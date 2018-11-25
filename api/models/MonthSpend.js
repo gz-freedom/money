@@ -7,17 +7,23 @@ let SpendItem = new Schema({
     },
     price: {
         type: Number
+    },
+    note: {
+        type: String
     }
 });
 
 let DaySpend = new Schema({
+    day: {
+        type: Number
+    },
     dayLeft: {
         type: Number
     },
     dayNote: {
         type: String
     },
-    items: SpendItem
+    items: [SpendItem]
 });
 
 let MonthSpend = new Schema({
@@ -39,7 +45,7 @@ let MonthSpend = new Schema({
     monthNote: {
         type: String
     },
-    dayExpenditure: DaySpend
+    dayExpenditure: [DaySpend]
 }, {
     collection: 'monthExpenditures'
 });

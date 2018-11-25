@@ -1,4 +1,4 @@
-<div *ngIf="!hasPlan">
+<div *ngIf="!currentExpenditure">
   <h3 class="text-success">开启这个月的开销记录</h3>
   <div class="form-row plan-form">
     <div class="form-group col-3">
@@ -17,4 +17,48 @@
       <button class="btn btn-primary btn-block btn-plan-start" (click)="addExpenditure()">开始记录</button>
     </div>
   </div>
+</div>
+<div *ngIf="currentExpenditure">
+  <h3 class="text-success">新增今日开销</h3>
+  <div class="form-group row">
+      <label class="col-sm-2 col-form-label">今日剩余</label>
+      <div class="col-sm-10">
+        <input type="number" readonly class="form-control-plaintext" [(ngModel)]="todayExpenditure.dayLeft">
+      </div>
+      <ul class="list-group col-sm-12">
+        <li class="list-group-item" *ngFor="let item of todayItems">
+          {{ item.name }} | {{ item.price }}元 | {{ item.note }}
+        </li>
+      </ul>
+  </div>
+  <form [formGroup]="angForm" novalidate>
+      <div class="form-group row">
+          <div class="input-group-prepend col-2">
+            <select class="form-control" formControlName="itemName" #itemName>
+              <option value="">开支项目</option>
+              <option value="早餐">早餐</option>
+              <option value="午餐">午餐</option>
+              <option value="晚餐">晚餐</option>
+              <option value="彩票">彩票</option>
+              <option value="购物">购物</option>
+            </select>
+          </div>
+          <div class="col-2">
+              <input type="number" class="form-control" formControlName="itemPrice" #itemPrice placeholder="开支数额">
+          </div>
+          <div class="col-6">
+              <input type="text" class="form-control" placeholder="备注" formControlName="note" #note>
+          </div>
+          <div class="col-2">
+              <button class="btn btn-primary float-right" (click)="addSpend(itemName.value, itemPrice.value, note.value)">新增开支</button>
+          </div>
+      </div>
+  </form>
+  <!-- <div *ngIf="currentExpenditure.dayExpenditure">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let spend of currentExpenditure.dayExpenditure">
+
+      </li>
+    </ul>
+  </div> -->
 </div>

@@ -7,5 +7,5 @@ export default class MonthSpend {
     total: Number;
     dayTotal: Number;
     monthNote: String;
-    dayExpenditure: DaySpend
+    dayExpenditure: DaySpend[];
 }
