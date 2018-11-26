@@ -51,14 +51,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.es.getCurrentExpenditure(this.thisYear, this.thisMonth).subscribe((res: MonthSpend) => {
+      console.log(res);
       this.currentExpenditure = res;
       this.dayExpenditure = res && res.dayExpenditure;
 
       if(this.dayExpenditure) {
-        this.todayExpenditure = this.dayExpenditure && this.dayExpenditure.filter(data => {
+        let todaySpend = this.dayExpenditure && this.dayExpenditure.filter(data => {
           return data.day === this.thisDay;
         }).pop();
-        this.todayItems = this.todayExpenditure.items;
+        if(todaySpend) {
+          this.todayExpenditure = todaySpend;
+          this.todayItems = todaySpend.items;
+        }        
       }
     });
   }

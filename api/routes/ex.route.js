@@ -32,9 +32,6 @@ exRoutes.route('/update/:id').post((req, res) => {
         } else {
             if(!spend.dayExpenditure) {
                 spend.dayExpenditure = [req.body.dayExpenditure];
-                spend.save().then(data => {
-                    res.json(data);
-                });
             } else {
                 let isExist = false, i, len;
                 for(i = 0, len = spend.dayExpenditure.length; i < len; i++){
@@ -44,33 +41,14 @@ exRoutes.route('/update/:id').post((req, res) => {
                         break;
                     }
                 }
-                if(isExist) {
-                    // save
-                    spend.save().then(data => {
-                        res.json(data);
-                    });
-                } else {
+                if(!isExist) {
                     // insert
-                    spend.updateOne({}, { $push: { "dayExpenditure": releaseEvents.body.dayExpenditure } })
-                        .then(data => {
-                            console.log('updated');
-                            console.log(data);
-                        });
+                    spend.dayExpenditure.push(req.body.dayExpenditure);
                 }
-                
-                /*
-                console.log(spend);
-                spend.updateOne({ "dayExpenditure.$.day": req.body.dayExpenditure.day }, {
-                    $set: { 
-                        "dayExpenditure.$.dayLeft": req.body.dayExpenditure.dayLeft, 
-                        "dayExpenditure.$.items": req.body.dayExpenditure.items 
-                    } 
-                })
-                    .then(data => {
-                        console.log(data);
-                    });
-                */
             }
+            spend.save().then(data => {
+                res.json(data);
+            });
         }
     }).catch(err => {
         res.status(400).send('Unable to update the database');
