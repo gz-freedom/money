@@ -36,7 +36,6 @@ exRoutes.route('/update/:id').post((req, res) => {
                     res.json(data);
                 });
             } else {
-                /*
                 let isExist = false, i, len;
                 for(i = 0, len = spend.dayExpenditure.length; i < len; i++){
                     if(spend.dayExpenditure[i].day === req.body.dayExpenditure.day) {
@@ -48,14 +47,18 @@ exRoutes.route('/update/:id').post((req, res) => {
                 if(isExist) {
                     // save
                     spend.save().then(data => {
-                        console.log("save");
                         res.json(data);
                     });
                 } else {
                     // insert
-
+                    spend.updateOne({}, { $push: { "dayExpenditure": releaseEvents.body.dayExpenditure } })
+                        .then(data => {
+                            console.log('updated');
+                            console.log(data);
+                        });
                 }
-                */
+                
+                /*
                 console.log(spend);
                 spend.updateOne({ "dayExpenditure.$.day": req.body.dayExpenditure.day }, {
                     $set: { 
@@ -66,6 +69,7 @@ exRoutes.route('/update/:id').post((req, res) => {
                     .then(data => {
                         console.log(data);
                     });
+                */
             }
         }
     }).catch(err => {
