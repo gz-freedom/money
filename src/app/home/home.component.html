@@ -19,46 +19,64 @@
   </div>
 </div>
 <div *ngIf="currentExpenditure">
-  <h3 class="text-success">新增今日开销</h3>
-  <div class="form-group row">
-      <label class="col-sm-2 col-form-label">今日剩余</label>
-      <div class="col-sm-10">
-        <input type="number" readonly class="form-control-plaintext" [(ngModel)]="todayExpenditure.dayLeft">
+  <div class="card card-ex">
+    <div class="card-header">今日开支概况</div>
+    <div class="card-body row">
+      <div class="col-8">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">今日剩余</label>
+          <div class="col-sm-10">
+            <input type="number" readonly class="form-control-plaintext" [(ngModel)]="todayExpenditure.dayLeft">
+          </div>
+          <div *ngFor="let item of todayItems">
+            {{ item.name }} | {{ item.price }}元 | {{ item.note }}
+          </div>
+        </div>
       </div>
-      <ul class="list-group col-sm-12">
-        <li class="list-group-item" *ngFor="let item of todayItems">
-          {{ item.name }} | {{ item.price }}元 | {{ item.note }}
+      <div class="col-4">
+        <form [formGroup]="angForm" novalidate>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">支出类别</label>
+            <div class="col-sm-8">
+              <select class="form-control" formControlName="itemName" #itemName>
+                <option value="">开支项目</option>
+                <option value="早餐">早餐</option>
+                <option value="午餐">午餐</option>
+                <option value="晚餐">晚餐</option>
+                <option value="彩票">彩票</option>
+                <option value="购物">购物</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">支出数额</label>
+            <div class="col-sm-8"><input type="number" class="form-control" formControlName="itemPrice" #itemPrice placeholder="开支数额"></div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">备注</label>
+            <div class="col-sm-8"><input type="text" class="form-control" placeholder="备注" formControlName="note" #note></div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-8"><button class="btn btn-primary float-right" (click)="addSpend(itemName.value, itemPrice.value, note.value)">新增开支</button></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card card-ex">
+    <div class="card-header">当月支出概况</div>
+    <div class="card-body">
+      当月明细
+    </div>
+    <div *ngIf="currentExpenditure.dayExpenditure">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" *ngFor="let spend of currentExpenditure.dayExpenditure">
+          <h6>{{ spend.day }}</h6>
+          <p *ngFor="let item of spend.items">
+            {{ item.name }} | {{ item.price }} | {{ item.note }}
+          </p>
         </li>
       </ul>
+    </div>
   </div>
-  <form [formGroup]="angForm" novalidate>
-      <div class="form-group row">
-          <div class="input-group-prepend col-2">
-            <select class="form-control" formControlName="itemName" #itemName>
-              <option value="">开支项目</option>
-              <option value="早餐">早餐</option>
-              <option value="午餐">午餐</option>
-              <option value="晚餐">晚餐</option>
-              <option value="彩票">彩票</option>
-              <option value="购物">购物</option>
-            </select>
-          </div>
-          <div class="col-2">
-              <input type="number" class="form-control" formControlName="itemPrice" #itemPrice placeholder="开支数额">
-          </div>
-          <div class="col-6">
-              <input type="text" class="form-control" placeholder="备注" formControlName="note" #note>
-          </div>
-          <div class="col-2">
-              <button class="btn btn-primary float-right" (click)="addSpend(itemName.value, itemPrice.value, note.value)">新增开支</button>
-          </div>
-      </div>
-  </form>
-  <!-- <div *ngIf="currentExpenditure.dayExpenditure">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let spend of currentExpenditure.dayExpenditure">
-
-      </li>
-    </ul>
-  </div> -->
 </div>

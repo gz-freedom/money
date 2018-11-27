@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ExService } from "../ex.service";
-import { NgbDropdownConfig } from "@ng-bootstrap/ng-bootstrap";
 
 import MonthSpend from "../class/monthSpend";
 import DaySpend from '../class/daySpend';
@@ -34,10 +33,7 @@ export class HomeComponent implements OnInit {
   };
   
 
-  constructor(private es: ExService, private ngbDd: NgbDropdownConfig, private fb: FormBuilder) {
-    ngbDd.autoClose = true;
-    ngbDd.placement = 'bottom-left';
-
+  constructor(private es: ExService, private fb: FormBuilder) {
     this.createForm();
   }
 
