@@ -5,6 +5,7 @@ export default class MonthSpend {
     month: Number;
     days: Number;
     total: Number;
+    currentTotal: Number;
     dayTotal: Number;
     monthNote: String;
     dayExpenditure: DaySpend[];

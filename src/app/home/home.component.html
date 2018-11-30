@@ -1,5 +1,5 @@
 <div *ngIf="!currentExpenditure">
-  <h3 class="text-success">开启这个月的开销记录</h3>
+  <h3 class="text-success mt-3">开启这个月的开销记录</h3>
   <div class="form-row plan-form">
     <div class="form-group col-3">
       <label>当月剩余天数</label>
@@ -19,18 +19,26 @@
   </div>
 </div>
 <div *ngIf="currentExpenditure">
-  <div class="card card-ex">
+  <div class="card card-ex text-white" [ngClass]="{ 
+      'bg-danger': todayExpenditure.dayLeft < 0, 
+      'bg-warning': todayExpenditure.dayLeft > 0 && todayExpenditure.dayLeft < 30, 
+      'bg-success': todayExpenditure.dayLeft >= 30
+    }">
     <div class="card-header">今日开支概况</div>
     <div class="card-body row">
       <div class="col-8">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">今日剩余</label>
           <div class="col-sm-10">
-            <input type="number" readonly class="form-control-plaintext" [(ngModel)]="todayExpenditure.dayLeft">
+            <h3>¥{{ todayExpenditure.dayLeft }}</h3>
           </div>
-          <div *ngFor="let item of todayItems">
-            {{ item.name }} | {{ item.price }}元 | {{ item.note }}
-          </div>
+          <ul class="list-group list-group-day-expend">
+            <li class="list-group-item d-flex justify-content-between align-items-center text-dark" *ngFor="let item of todayItems">
+                <div>{{ item.name }}</div>
+                <!-- <p class="note">{{ item.note }}</p> -->
+                <span class="badge badge-success badge-pill">¥{{ item.price }}</span>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="col-4">
@@ -45,6 +53,10 @@
                 <option value="晚餐">晚餐</option>
                 <option value="彩票">彩票</option>
                 <option value="购物">购物</option>
+                <option value="理发">理发</option>
+                <option value="买菜">买菜</option>
+                <option value="买水">买水</option>
+                <option value="话费">话费</option>
               </select>
             </div>
           </div>
@@ -57,7 +69,7 @@
             <div class="col-sm-8"><input type="text" class="form-control" placeholder="备注" formControlName="note" #note></div>
           </div>
           <div class="form-group row">
-            <div class="col-sm-8"><button class="btn btn-primary float-right" (click)="addSpend(itemName.value, itemPrice.value, note.value)">新增开支</button></div>
+            <div class="col-sm-12"><button class="btn btn-primary float-right" (click)="addSpend(itemName.value, itemPrice.value, note.value)">新增开支</button></div>
           </div>
         </form>
       </div>
@@ -65,18 +77,33 @@
   </div>
   <div class="card card-ex">
     <div class="card-header">当月支出概况</div>
-    <div class="card-body">
-      当月明细
-    </div>
-    <div *ngIf="currentExpenditure.dayExpenditure">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let spend of currentExpenditure.dayExpenditure">
-          <h6>{{ spend.day }}</h6>
-          <p *ngFor="let item of spend.items">
-            {{ item.name }} | {{ item.price }} | {{ item.note }}
-          </p>
+    <div class="card-body card-month-detail">
+      <ul>
+        <li>
+          <div>当月预算：{{ currentExpenditure.total }}</div>
+        </li>
+        <li>
+          <div>当月花费：{{ currentExpenditure.currentTotal }}</div>
+        </li>
+        <li>
+          <div>当月剩余：{{ currentMonthLeft }}</div>
         </li>
       </ul>
+    </div>
+    <div *ngIf="currentExpenditure.dayExpenditure" class="container">
+      <div *ngFor="let spend of currentExpenditure.dayExpenditure" class="row month-list-item">
+          <div class="col-1 bg-light border-right">
+            <h3 class="mt-2 text-center">{{ spend.day }}</h3>
+          </div>
+          <div class="col-2 border-right">
+            <h3 class="mt-2 text-center">¥{{ spend.dayTotal || 0 }}</h3>
+          </div>
+          <ul class="col-9 list-group list-group-flush list-group-day-item">
+              <li class="list-group-item" *ngFor="let item of spend.items">
+                  {{ item.name }} ¥{{ item.price }}
+              </li>
+          </ul>
+      </div>
     </div>
   </div>
 </div>

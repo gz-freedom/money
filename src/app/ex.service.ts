@@ -17,9 +17,10 @@ export class ExService {
     return this.http.post(`${this.uri}/addMonth`, obj);
   }
 
-  updateExpenditure(dayExpenditure, id) {
+  updateExpenditure(dayExpenditure, currentTotal, id) {
     let obj = {
-      dayExpenditure: dayExpenditure
+      dayExpenditure: dayExpenditure,
+      currentTotal: currentTotal
     };
     return this.http.post(`${this.uri}/update/${id}`, obj);
   }

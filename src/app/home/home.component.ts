@@ -22,15 +22,18 @@ export class HomeComponent implements OnInit {
   })();
   daySpend: number = 0;
   totalSpend: number = 0;
+  currentTotal: number = 0;
   currentExpenditure;
   dayExpenditure: DaySpend[];
   todayItems: SpendItem[] = [];
   todayExpenditure: DaySpend = {
     day: this.thisDay,
+    dayTotal: 0,
     dayLeft: 80,
     dayNote: "",
     items: this.todayItems
   };
+  currentMonthLeft: number;
   
 
   constructor(private es: ExService, private fb: FormBuilder) {
@@ -39,28 +42,34 @@ export class HomeComponent implements OnInit {
 
   createForm() {
     this.angForm = this.fb.group({
-      itemName: ['早餐', Validators.required],
-      itemPrice: [5, Validators.required],
+      itemName: ['', Validators.required],
+      itemPrice: [, Validators.required],
       note: ['']
     });
   }
 
   ngOnInit() {
     this.es.getCurrentExpenditure(this.thisYear, this.thisMonth).subscribe((res: MonthSpend) => {
-      console.log(res);
-      this.currentExpenditure = res;
-      this.dayExpenditure = res && res.dayExpenditure;
-
-      if(this.dayExpenditure) {
-        let todaySpend = this.dayExpenditure && this.dayExpenditure.filter(data => {
-          return data.day === this.thisDay;
-        }).pop();
-        if(todaySpend) {
-          this.todayExpenditure = todaySpend;
-          this.todayItems = todaySpend.items;
-        }        
-      }
+      this.currentMonthExpenditureHandler(res);
     });
+  }
+
+  currentMonthExpenditureHandler(data: MonthSpend) {
+    if(data) {
+      this.currentExpenditure = data;
+      this.currentMonthLeft = parseInt(data.total + "") - parseInt(data.currentTotal + "");
+      this.dayExpenditure = data.dayExpenditure;
+    }
+
+    if(this.dayExpenditure) {
+      let todaySpend = this.dayExpenditure && this.dayExpenditure.filter(data => {
+        return data.day === this.thisDay;
+      }).pop();
+      if(todaySpend) {
+        this.todayExpenditure = todaySpend;
+        this.todayItems = todaySpend.items;
+      }        
+    }
   }
 
   keyup() {
@@ -74,11 +83,12 @@ export class HomeComponent implements OnInit {
       days: this.monthDays,
       total: this.totalSpend,
       dayTotal: this.daySpend,
+      currentTotal: this.currentTotal,
       dayExpenditure: this.dayExpenditure
     };
     this.es.addExpenditure(obj)
         .subscribe(res => {
-          console.log(res);
+          this.ngOnInit();
         });
   }
 
@@ -87,12 +97,15 @@ export class HomeComponent implements OnInit {
       name: name,
       price: price,
       note: note
-    }
-    this.todayExpenditure.dayLeft = parseInt(this.todayExpenditure.dayLeft + "") - price;
+    };
+    let currentTotal = parseInt(this.currentExpenditure.currentTotal + "") + parseInt(price);
+    this.todayExpenditure.dayLeft = parseInt(this.todayExpenditure.dayLeft + "") - parseInt(price);
     this.todayExpenditure.items.push(spendItem);
-
-    this.es.updateExpenditure(this.todayExpenditure, this.currentExpenditure._id).subscribe(res => {
-      console.log(res);
+    this.todayExpenditure.dayTotal = parseInt(this.todayExpenditure.dayTotal + "") + parseInt(price);
+    
+    this.es.updateExpenditure(this.todayExpenditure, currentTotal, this.currentExpenditure._id).subscribe((res: MonthSpend) => {
+      this.angForm.reset({ itemName: '' });
+      this.currentMonthExpenditureHandler(res);
     });
   }
 

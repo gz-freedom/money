@@ -30,6 +30,7 @@ exRoutes.route('/update/:id').post((req, res) => {
         if(!spend) {
             return next(new Error('Could not load Document'));
         } else {
+            spend.currentTotal = req.body.currentTotal;
             if(!spend.dayExpenditure) {
                 spend.dayExpenditure = [req.body.dayExpenditure];
             } else {

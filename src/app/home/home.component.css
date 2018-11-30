@@ -7,3 +7,27 @@
 .card-ex {
     margin-top: 15px;
 }
+
+.list-group-day-expend {
+    width: 100%;
+    padding: 0 1em;
+}
+.list-group-day-expend .list-group-item {
+    padding: .3em 1em;
+    line-height: 30px;
+    font-size: 14px;
+}
+.month-list-item {
+    border-bottom: #ccc solid 1px;
+    box-sizing: border-box;
+}
+.card-month-detail {
+    border-bottom: #ccc solid 1px;
+}
+
+.list-group-day-item {
+    padding-right: 0;
+}
+.list-group-day-item .list-group-item:first-child {
+    border-top-width: 0;
+}

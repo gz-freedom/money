@@ -17,6 +17,9 @@ let DaySpend = new Schema({
     day: {
         type: Number
     },
+    dayTotal: {
+        type: Number
+    },
     dayLeft: {
         type: Number
     },
@@ -37,6 +40,9 @@ let MonthSpend = new Schema({
         type: Number
     },
     total: {
+        type: Number
+    },
+    currentTotal: {
         type: Number
     },
     dayTotal: {
